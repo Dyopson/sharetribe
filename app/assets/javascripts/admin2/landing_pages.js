@@ -342,3 +342,51 @@ $(function() {
         });
     }
 });
+import { useEffect, useState } from 'react';
+import { sdk } from '../../util/sdkLoader';
+
+const [goldMembers, setGoldMembers] = useState([]);
+
+useEffect(() => {
+  sdk.users
+    .query({
+      perPage: 12, // Anzahl der Goldmitglieder
+      'pub_membership': 'gold', // Feldname, den du in Flex Console gewählt hast
+    })
+    .then(response => {
+      setGoldMembers(response.data);
+    })
+    .catch(e => {
+      console.error('Gold-Mitglieder konnten nicht geladen werden', e);
+    });
+}, []);
+<div className="gold-members-section">
+  <h2>Gold-Mitglieder</h2>
+  <div className="gold-members-logos">
+    {goldMembers.map(user => {
+      const logo = user.attributes.profile.publicData.logoUrl;
+      return (
+        <img
+          key={user.id.uuid}
+          src={logo}
+          alt="Gold-Mitglied"
+          className="gold-logo"
+        />
+      );
+    })}
+  </div>
+</div>
+.gold-members-logos {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 20px;
+  padding: 10px;
+}
+
+.gold-logo {
+  width: 100px;
+  height: auto;
+  object-fit: contain;
+}
+npm install react-slick slick-carousel
