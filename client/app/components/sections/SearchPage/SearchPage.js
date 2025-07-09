@@ -114,3 +114,19 @@ SearchPage.propTypes = {
 };
 
 export default SearchPage;
+const sortByMembership = listings => {
+  const membershipRank = {
+    gold: 1,
+    silver: 2,
+    bronze: 3
+  };
+
+  return listings.sort((a, b) => {
+    const aMembership = a.relationships?.author?.attributes?.profile?.publicData?.membership || 'bronze';
+    const bMembership = b.relationships?.author?.attributes?.profile?.publicData?.membership || 'bronze';
+
+    return membershipRank[aMembership] - membershipRank[bMembership];
+  });
+};
+const sortedListings = sortByMembership(searchListings);
+<Listings cards={sortedListings} />
